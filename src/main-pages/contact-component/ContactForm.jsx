@@ -1,0 +1,208 @@
+import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import MagicEffect from "../../reuseble-component/MagicEffect";
+
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Youtube,
+  Facebook,
+  Instagram,
+  Linkedin,
+  MailCheck,
+} from "lucide-react";
+
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "./firebase.config";
+
+const googleProvier = new GoogleAuthProvider()
+
+const ContactForm = () => {
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData({ ...formData, phone: value });
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      toast.error("Name is required!");
+      return false;
+    }
+    if (!formData.email.trim()) {
+      toast.error("Email is required!");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email!");
+      return false;
+    }
+    if (!formData.phone.trim()) {
+      toast.error("Phone number is required!");
+      return false;
+    }
+    if (!formData.message.trim()) {
+      toast.error("Message is required!");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("Form Data:", formData);
+      toast.success("Message Sent Successfully!");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    }
+  };
+
+
+  const handleGoogleSignIn = () => {
+    console.log("google verification click")
+    signInWithPopup(auth, googleProvier)
+    .then((result) => {
+      console.log(result)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6 z-100">
+      <div className="grid md:grid-cols-2 gap-10 max-w-6xl w-full">
+        <MagicEffect particleColor="255, 255, 255" glowColor="0, 200, 255">
+          {/* Left Side More Information */}
+
+          <div className="border border-gray-300 md:border-none shadow-lg rounded-2xl p-6 space-y-6 order-2 md:order-1">
+            <h2 className="text-2xl font-bold text-[#ffffff]">
+              More Information
+            </h2>
+
+            <div className="flex items-center space-x-3">
+              <MapPin className="text-[#ffffff]" />
+              <p className="text-[#ffffff]">
+                House 02, Road 01, Block – A, West Dhanmondi Housing, Bosila,
+                Mohammadpur, Dhaka, Bangladesh
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <Phone className="text-[#ffffff]" />
+              <p className="text-[#ffffff]">+8801581511905</p>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <Mail className="text-[#ffffff]" />
+              <p className="text-[#ffffff]">official@skillparadox.com</p>
+            </div>
+          </div>
+        </MagicEffect>
+        <MagicEffect particleColor="255, 255, 255" glowColor="0, 200, 255">
+          {/* Right Side Contact Form */}
+          <div className="bg-[#060010] border border-gray-300 md:border-none shadow-lg rounded-2xl p-6 order-1 md:order-2">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <h2 className="text-2xl font-bold text-center text-[#ffffff]">
+                Contact Us
+              </h2>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
+              />
+
+              <textarea
+                name="message"
+                placeholder="Write your message..."
+                rows="4"
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-[#7638e8] text-white font-semibold py-3 rounded-xl shadow-md"
+              >
+                Send Message
+              </button>
+            </form>
+
+            {/* Social Sign-in Section */}
+            <div className="mt-6 text-center">
+              <p className="text-[#ffffff] mb-3">Follow us</p>
+              <div className="flex justify-center space-x-3">
+                <a
+                  href=""
+                  onClick={handleGoogleSignIn}
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <MailCheck size={22} color="#ffffff"></MailCheck>
+                </a>
+
+                <a
+                  href=""
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <Facebook size={22} color="#ffffff"></Facebook>
+                </a>
+
+                <a
+                  href=""
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <Youtube size={22} color="#ffffff"></Youtube>
+                </a>
+
+                <a
+                  href=""
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <Instagram size={22} color="#ffffff"></Instagram>
+                </a>
+
+                <a
+                  href=""
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <Linkedin size={22} color="#ffffff"></Linkedin>
+                </a>
+              </div>
+            </div>
+          </div>
+        </MagicEffect>
+      </div>
+
+      <ToastContainer position="top-center" autoClose={2000} />
+    </div>
+  );
+};
+
+export default ContactForm;
