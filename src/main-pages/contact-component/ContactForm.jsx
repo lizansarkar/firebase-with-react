@@ -17,10 +17,10 @@ import {
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "./firebase.config";
 
-const googleProvier = new GoogleAuthProvider()
+const googleProvier = new GoogleAuthProvider();
 
 const ContactForm = () => {
-
+  const [user, setUser] = useState(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -70,17 +70,17 @@ const ContactForm = () => {
     }
   };
 
-
   const handleGoogleSignIn = () => {
-    console.log("google verification click")
+    console.log("google verification click");
     signInWithPopup(auth, googleProvier)
-    .then((result) => {
-      console.log(result)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }
+      .then((result) => {
+        console.log(result.user);
+        setUser(result.user)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 z-100">
@@ -109,6 +109,22 @@ const ContactForm = () => {
             <div className="flex items-center space-x-3">
               <Mail className="text-[#ffffff]" />
               <p className="text-[#ffffff]">official@skillparadox.com</p>
+            </div>
+
+            {/* react withe firebase */}
+            <div>
+              <button
+                onClick={handleGoogleSignIn}
+                className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+              >
+                <MailCheck size={22} color="#ffffff"></MailCheck>
+              </button>
+              {
+                user && <div>
+                  <img src={user.photoURL} alt="" />
+                  <h1 className="text-[#ffffff]">{user.displayName}</h1>
+                </div>
+              }
             </div>
           </div>
         </MagicEffect>
@@ -155,18 +171,12 @@ const ContactForm = () => {
               </button>
             </form>
 
+
+
             {/* Social Sign-in Section */}
             <div className="mt-6 text-center">
               <p className="text-[#ffffff] mb-3">Follow us</p>
               <div className="flex justify-center space-x-3">
-                <a
-                  href=""
-                  onClick={handleGoogleSignIn}
-                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
-                >
-                  <MailCheck size={22} color="#ffffff"></MailCheck>
-                </a>
-
                 <a
                   href=""
                   className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
