@@ -12,15 +12,16 @@ import {
   Instagram,
   Linkedin,
   MailCheck,
+  LogOut,
 } from "lucide-react";
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from "./firebase.config";
 
 const googleProvier = new GoogleAuthProvider();
 
 const ContactForm = () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -75,7 +76,19 @@ const ContactForm = () => {
     signInWithPopup(auth, googleProvier)
       .then((result) => {
         console.log(result.user);
-        setUser(result.user)
+        setUser(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleSignOut = () => {
+    console.log("youre clicked sign out button");
+    signOut(auth, googleProvier)
+      .then((result) => {
+        console.log(result);
+        setUser(null);
       })
       .catch((error) => {
         console.log(error);
@@ -113,18 +126,28 @@ const ContactForm = () => {
 
             {/* react withe firebase */}
             <div>
-              <button
-                onClick={handleGoogleSignIn}
-                className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
-              >
-                <MailCheck size={22} color="#ffffff"></MailCheck>
-              </button>
-              {
-                user && <div>
+              {user ? (
+                <button
+                  onClick={handleSignOut}
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <LogOut size={22} color="#ffffff"></LogOut>
+                </button>
+              ) : (
+                <button
+                  onClick={handleGoogleSignIn}
+                  className="p-1.5 bg-[#7638e8] rounded-full hover:bg-[#000000] transition-colors cursor-pointer"
+                >
+                  <MailCheck size={22} color="#ffffff"></MailCheck>
+                </button>
+              )}
+
+              {user && (
+                <div>
                   <img src={user.photoURL} alt="" />
                   <h1 className="text-[#ffffff]">{user.displayName}</h1>
                 </div>
-              }
+              )}
             </div>
           </div>
         </MagicEffect>
@@ -170,8 +193,6 @@ const ContactForm = () => {
                 Send Message
               </button>
             </form>
-
-
 
             {/* Social Sign-in Section */}
             <div className="mt-6 text-center">
