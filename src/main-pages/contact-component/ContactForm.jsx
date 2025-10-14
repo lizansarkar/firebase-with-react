@@ -23,6 +23,10 @@ const ContactForm = () => {
 
   const [user, setUser] = useState(null);
 
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const [success, setSuccess] = useState(false)
+
   const googleprovider = new GoogleAuthProvider();
   
   const [formData, setFormData] = useState({
@@ -32,7 +36,6 @@ const ContactForm = () => {
     message: "",
   });
 
-  // ✅ এখন formData ব্যবহার করা যাবে
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -97,9 +100,19 @@ const ContactForm = () => {
 
       const { email, password } = formData;
 
+      setSuccess(false)
+      setErrorMsg("")
+
       createUserWithEmailAndPassword(auth, email, password)
-        .then((result) => console.log("New user created:", result.user))
-        .catch((error) => console.log(error));
+        .then((result) => {
+          console.log("New user created:", result.message)
+          setSuccess(true)
+        })
+        .catch((error) => {
+          console.log("this is the error ", error.message);
+          const errorText = error.message;
+          setErrorMsg(errorText)
+        });
     }
   };
 
@@ -211,6 +224,14 @@ const ContactForm = () => {
               >
                 Ragister Now
               </button>
+
+              {
+                success && <p className="text-green-500">Acount register successfully</p>
+              }
+
+              {
+                errorMsg && <p className="text-red-500">please : {errorMsg}</p>
+              }
             </form>
 
             {/* Social Sign-in Section */}
