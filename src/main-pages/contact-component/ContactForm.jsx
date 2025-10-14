@@ -15,25 +15,28 @@ import {
   LogOut,
 } from "lucide-react";
 
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import { auth } from "./firebase.config";
 
-
 const ContactForm = () => {
-
   const [user, setUser] = useState(null);
 
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [success, setSuccess] = useState(false)
+  const [success, setSuccess] = useState(false);
 
   const googleprovider = new GoogleAuthProvider();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    message: "",
+    // message: "",
   });
 
   const handleChange = (e) => {
@@ -58,10 +61,10 @@ const ContactForm = () => {
       toast.error("Please enter a valid email!");
       return false;
     }
-    if (!formData.message.trim()) {
-      toast.error("Message is required!");
-      return false;
-    }
+    // if (!formData.message.trim()) {
+    //   toast.error("Message is required!");
+    //   return false;
+    // }
     return true;
   };
 
@@ -93,29 +96,34 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+          const { email, password } = formData;
+      const passRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+      if (!passRegex.test(password)) {
+        console.log("valo password dao");
+        setErrorMsg("please use strong and valid password");
+        return;
+      }
+
     if (validateForm()) {
       console.log("Form Data:", formData);
       toast.success("Message Sent Successfully!");
       setFormData({ name: "", email: "", password: "", message: "" });
 
-      const { email, password } = formData;
-
-      setSuccess(false)
-      setErrorMsg("")
+      setSuccess(false);
+      setErrorMsg("");
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((result) => {
-          console.log("New user created:", result.message)
-          setSuccess(true)
+          console.log("New user created:", result.user);
+          setSuccess(true);
         })
         .catch((error) => {
           console.log("this is the error ", error.message);
           const errorText = error.message;
-          setErrorMsg(errorText)
+          setErrorMsg(errorText);
         });
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 z-100">
@@ -209,14 +217,14 @@ const ContactForm = () => {
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
               />
 
-              <textarea
+              {/* <textarea
                 name="message"
                 placeholder="Write your message..."
                 rows="4"
                 value={formData.message}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
-              />
+              /> */}
 
               <button
                 type="submit"
@@ -225,13 +233,11 @@ const ContactForm = () => {
                 Ragister Now
               </button>
 
-              {
-                success && <p className="text-green-500">Acount register successfully</p>
-              }
+              {success && (
+                <p className="text-green-500">Acount register successfully</p>
+              )}
 
-              {
-                errorMsg && <p className="text-red-500">please : {errorMsg}</p>
-              }
+              {errorMsg && <p className="text-red-500">please : {errorMsg}</p>}
             </form>
 
             {/* Social Sign-in Section */}
