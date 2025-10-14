@@ -15,26 +15,26 @@ import {
   LogOut,
 } from "lucide-react";
 
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from "./firebase.config";
 
-const googleProvier = new GoogleAuthProvider();
 
 const ContactForm = () => {
+
   const [user, setUser] = useState(null);
+
+  const googleprovider = new GoogleAuthProvider();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    password: "",
     message: "",
   });
 
+  // ✅ এখন formData ব্যবহার করা যাবে
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handlePhoneChange = (value) => {
-    setFormData({ ...formData, phone: value });
   };
 
   const validateForm = () => {
@@ -46,13 +46,13 @@ const ContactForm = () => {
       toast.error("Email is required!");
       return false;
     }
+    if (!formData.password.trim()) {
+      toast.error("Password is required!");
+      return false;
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       toast.error("Please enter a valid email!");
-      return false;
-    }
-    if (!formData.phone.trim()) {
-      toast.error("Phone number is required!");
       return false;
     }
     if (!formData.message.trim()) {
@@ -62,18 +62,10 @@ const ContactForm = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form Data:", formData);
-      toast.success("Message Sent Successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    }
-  };
-
   const handleGoogleSignIn = () => {
-    console.log("google verification click");
-    signInWithPopup(auth, googleProvier)
+    console.log("Google verification click");
+
+    signInWithPopup(auth, googleprovider)
       .then((result) => {
         console.log(result.user);
         setUser(result.user);
@@ -84,16 +76,33 @@ const ContactForm = () => {
   };
 
   const handleSignOut = () => {
-    console.log("youre clicked sign out button");
-    signOut(auth, googleProvier)
-      .then((result) => {
-        console.log(result);
+    console.log("You clicked sign out button");
+    signOut(auth)
+      .then(() => {
         setUser(null);
+        console.log("Signed out successfully");
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      console.log("Form Data:", formData);
+      toast.success("Message Sent Successfully!");
+      setFormData({ name: "", email: "", password: "", message: "" });
+
+      const { email, password } = formData;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((result) => console.log("New user created:", result.user))
+        .catch((error) => console.log(error));
+    }
+  };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 z-100">
@@ -177,6 +186,16 @@ const ContactForm = () => {
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
               />
 
+              {/* Password Field */}
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                value={formData.password || ""}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
+              />
+
               <textarea
                 name="message"
                 placeholder="Write your message..."
@@ -190,7 +209,7 @@ const ContactForm = () => {
                 type="submit"
                 className="w-full bg-[#7638e8] text-white font-semibold py-3 rounded-xl shadow-md"
               >
-                Send Message
+                Ragister Now
               </button>
             </form>
 

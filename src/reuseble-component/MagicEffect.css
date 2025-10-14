@@ -2,8 +2,8 @@
   --hue: 27;
   --sat: 69%;
   --white: hsl(0,0%,100%);
-  --purple-primary: rgba(132,0,255,1);
-  --purple-glow: rgba(132,0,255,0.2);
+  --purple-primary: rgba(0, 255, 13,1);
+  --purple-glow: rgba(8, 0, 114, 0.2);
   /* --purple-border: rgba(132,0,255,0.8); */
   /* --border-color: #392e4e; */
   --background-dark: #060010;
@@ -22,7 +22,7 @@
 /* generic card used to wrap your children */
 .card{
   position: relative;
-  border-radius: 16px;
+  /* border-radius: 16px; */
   padding: 1rem;
   overflow: visible;
   background: var(--background-dark);
@@ -36,9 +36,9 @@
 }
 
 /* small lift on hover */
-.card:hover{
+/* .card:hover{
   transform: translateY(-6px);
-}
+} */
 
 /* border glow pseudo */
 .card--border-glow::after{
@@ -69,7 +69,11 @@
 }
 
 /* particle container style */
-.particle-container { position: relative; overflow: hidden; }
+.particle-container {
+   position: relative;
+    overflow: hidden;
+    border-radius: 0px;
+}
 
 /* particle visual */
 .particle{
