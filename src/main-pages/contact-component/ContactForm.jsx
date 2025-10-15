@@ -13,6 +13,8 @@ import {
   Linkedin,
   MailCheck,
   LogOut,
+  Eye,
+  EyeClosed,
 } from "lucide-react";
 
 import {
@@ -22,6 +24,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "./firebase.config";
+import { Link } from "react-router";
 
 const ContactForm = () => {
   const [user, setUser] = useState(null);
@@ -29,6 +32,8 @@ const ContactForm = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const [success, setSuccess] = useState(false);
+  
+  const [showPassword, setShowPassword] = useState(false);
 
   const googleprovider = new GoogleAuthProvider();
 
@@ -96,13 +101,15 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-          const { email, password } = formData;
-      const passRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
-      if (!passRegex.test(password)) {
-        console.log("valo password dao");
-        setErrorMsg("please use strong and valid password");
-        return;
-      }
+    const { email, password } = formData;
+    const terms = e.target.terms.checked;
+    console.log("register button clicked",email, password, terms)
+    // const passRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+    // if (!passRegex.test(password)) {
+    //   console.log("valo password dao");
+    //   setErrorMsg("please use strong and valid password");
+    //   return;
+    // }
 
     if (validateForm()) {
       console.log("Form Data:", formData);
@@ -111,6 +118,11 @@ const ContactForm = () => {
 
       setSuccess(false);
       setErrorMsg("");
+
+      if(!terms) {
+        setErrorMsg("please accept our terms and condition")
+        return;
+      }
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((result) => {
@@ -124,6 +136,11 @@ const ContactForm = () => {
         });
     }
   };
+
+  const handleTooglePassword = (e) =>{
+    e.preventDefault()
+    setShowPassword(!showPassword)
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 z-100">
@@ -208,14 +225,18 @@ const ContactForm = () => {
               />
 
               {/* Password Field */}
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password || ""}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formData.password || ""}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
+                />
+
+                <button onClick={handleTooglePassword} className="cursor-pointer absolute top-2 right-3 bg-transparent border-none text-[#fcfcfc]">{showPassword ? <Eye></Eye> : <EyeClosed></EyeClosed> }</button>
+              </div>
 
               {/* <textarea
                 name="message"
@@ -225,6 +246,15 @@ const ContactForm = () => {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:text-[#ffffff] focus:outline-none"
               /> */}
+
+              <label className="label">
+                <input 
+                type="checkbox"
+                name="terms"
+                className="checkbox text-[#ffffff] border-[#ffffff]"
+                />
+                Accept our term and condition
+              </label>
 
               <button
                 type="submit"
@@ -239,6 +269,10 @@ const ContactForm = () => {
 
               {errorMsg && <p className="text-red-500">please : {errorMsg}</p>}
             </form>
+            {/* allready have a account */}
+            <div>
+              <span>Allready have an account? <Link to="/login" className="text-blue-500 underline">Sign Up</Link></span>
+            </div>
 
             {/* Social Sign-in Section */}
             <div className="mt-6 text-center">
