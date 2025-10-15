@@ -1,9 +1,22 @@
-import React from "react";
-import { NavLink } from "react-router";
+import React, { use } from "react";
+import { Link, NavLink } from "react-router";
 import MagicEffect from "../reuseble-component/MagicEffect";
 import "./Navbar.css"
+import { AuthContext } from "../context/auth-context/AuthContext";
 
 export default function Navbar() {
+  const { user, signOutUser } = use(AuthContext);
+
+  const handleSignOut = () => {
+    signOutUser()
+    .then(res => {
+      console.log(res)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
   return (
     <div>
       <MagicEffect>
@@ -65,7 +78,9 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="navbar-end">
-            <a className="btn">Button</a>
+            {
+              user ? ( <a onClick={handleSignOut} className="btn">Log out</a> ) : ( <Link to="/login">Log In</Link> )
+            }
           </div>
         </div>
       </MagicEffect>
