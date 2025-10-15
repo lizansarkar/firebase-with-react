@@ -5,26 +5,29 @@ import MagicEffect from "../reuseble-component/MagicEffect";
 import { Link } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase.init";
-import { AuthContext } from "../main";
+import { AuthContext } from "../context/auth-context/AuthContext";
+// import { AuthContext } from "../main";
 
 const Register = () => {
-  const userInfo = use(AuthContext)
-  console.log("user ar info with create context", userInfo)
-  const handleRegister = (event) => {
+        
+    const { createUser } = use(AuthContext);
+
+    const handleRegister = (event) => {
     event.preventDefault()
+
     const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log(email, password)
+    console.log("my context email and password", email, password)
 
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((res) => {
-      console.log(res.user)
+    createUser(email, password)
+    .then(res => {
+      console.log(res)
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error)
     })
-
   }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="card w-full max-w-sm">
