@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router";
 import MagicEffect from "../reuseble-component/MagicEffect";
+import "./Navbar.css"
 
 export default function Navbar() {
   return (
@@ -56,13 +57,10 @@ export default function Navbar() {
                 <NavLink to="/about">About</NavLink>
               </li>
               <li>
-                <NavLink to="/register">Register</NavLink>
-              </li>
-              <li>
                 <NavLink to="/login">Login</NavLink>
               </li>
               <li>
-                <NavLink to="/contact">Contact</NavLink>
+                <NavLink to="/register">Register</NavLink>
               </li>
             </ul>
           </div>

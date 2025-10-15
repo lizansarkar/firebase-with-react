@@ -71,8 +71,8 @@
 /* particle container style */
 .particle-container {
    position: relative;
-    overflow: hidden;
-    border-radius: 0px;
+   /* overflow: hidden; */
+   border-radius: 0px;
 }
 
 /* particle visual */

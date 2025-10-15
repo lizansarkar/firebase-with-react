@@ -1,0 +1,6 @@
+.navbar a.active {
+    padding: 5px 0px;
+    color: orange;
+    border-top: 2px solid orange;
+    border-bottom: 2px solid orange;
+}

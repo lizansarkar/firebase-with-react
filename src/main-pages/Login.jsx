@@ -1,45 +1,31 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+
 import React, { useState } from "react";
-import { auth } from "./contact-component/firebase.config";
+import { Link } from "react-router";
 
 export default function Login() {
-  const [error, setError] = useState()
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
-    setError("")
-
-    signInWithEmailAndPassword(auth, email, password)
-    .then((res) => {
-      console.log("youre rsponse user",res.user)
-    })
-    .catch((error) => {
-      console.log(error)
-      setError(error.message)
-    })
-  }
   
   return (
-    <div className="h-[100vh] w-full flex flex-col justify-center items-center">
-      <form onSubmit = { handleLogin }>
-        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-          <legend className="fieldset-legend">Login</legend>
-
-          <label className="label">Email</label>
-          <input type="email" name="email" className="input" placeholder="Email" />
-
-          <label className="label">Password</label>
-          <input type="password" name="password" className="input" placeholder="Password" />
-
-          <button className="btn btn-neutral mt-4">Login</button>
-        </fieldset>
-      </form>
-
-      {
-        error && <p className="text-red-500">{error}</p>
-      }
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="card w-full max-w-sm">
+        <h1 className="py-10 font-semibold text-3xl ">Register Now</h1>
+        <div className="card-body bg-[#ffffff] text-[#000000] rounded-md">
+          <form>
+            <fieldset className="fieldset">
+              {/* email field */}
+              <label className="label">Email</label>
+              <input type="email" name="email" className="input" placeholder="Email" />
+              {/* password field */}
+              <label className="label">Password</label>
+              <input type="password" name="password" className="input" placeholder="Password" />
+              <div>
+                <a className="link link-hover">Forgot password?</a>
+              </div>
+              <button className="btn btn-neutral mt-4">Register Now</button>
+            </fieldset>
+          </form>
+          <span>New to our website ? please <Link to="/register" className="text-blue-500 underline">Register</Link> </span>
+        </div>
+      </div>
     </div>
   );
 }
