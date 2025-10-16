@@ -65,6 +65,9 @@ export default function Navbar() {
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
+                <NavLink to="/dashboard">Dashboard</NavLink>
+              </li>
+              <li>
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
@@ -80,6 +83,8 @@ export default function Navbar() {
               {
                 user && <>
                   <li><NavLink to="/personal">Personal Info</NavLink></li>
+                  <li><NavLink to="/order">Order</NavLink></li>
+                  <li><NavLink to="/profile">Profile</NavLink></li>
                 </>
               }
             </ul>
