@@ -5,12 +5,13 @@ import "./Navbar.css"
 import { AuthContext } from "../context/auth-context/AuthContext";
 
 export default function Navbar() {
-  const { user, signOutUser } = use(AuthContext);
+  const { user, signOutUser, setUser } = use(AuthContext);
 
   const handleSignOut = () => {
     signOutUser()
     .then(res => {
       console.log(res)
+      setUser(null)
     })
     .catch(error => {
       console.log(error)
@@ -75,6 +76,12 @@ export default function Navbar() {
               <li>
                 <NavLink to="/register">Register</NavLink>
               </li>
+
+              {
+                user && <>
+                  <li><NavLink to="/personal">Personal Info</NavLink></li>
+                </>
+              }
             </ul>
           </div>
           <div className="navbar-end">

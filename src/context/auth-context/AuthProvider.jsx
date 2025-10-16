@@ -38,6 +38,7 @@ export default function AuthProvider({ children }) {
     user,
     createUser,
     signInUser,
+    setUser,
     signOutUser,
   };
 

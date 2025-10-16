@@ -5,6 +5,7 @@ import Home from "../main-pages/Home.jsx";
 import About from "../main-pages/About.jsx";
 import Login from "../main-pages/Login.jsx";
 import Register from "../main-pages/Register.jsx";
+import Personalinfo from "../main-pages/personal-page/Personalinfo.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       { path: "/about", element: <About></About> },
       { path: "/login", element: <Login></Login> },
       { path: "/register", element: <Register></Register> },
+      { path: "/personal", element: <Personalinfo></Personalinfo>}
     ],
   },
 ]);
